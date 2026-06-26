@@ -133,9 +133,15 @@ function ProductDetails() {
                 </button>
                 <span className="qty-val">{cartItem.quantity}</span>
                 <button
-                  onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
+                  onClick={() => {
+                    if (cartItem.quantity < product.stock) {
+                      updateQuantity(product.id, cartItem.quantity + 1)
+                    }
+                  }}
                   className="qty-btn-plus"
                   aria-label="Increase quantity"
+                  disabled={cartItem.quantity >= product.stock}
+                  style={cartItem.quantity >= product.stock ? { opacity: 0.5, cursor: "not-allowed" } : {}}
                 >
                   +
                 </button>
@@ -151,7 +157,7 @@ function ProductDetails() {
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                 >
-                  {[...Array(10).keys()].map((num) => (
+                  {[...Array(Math.min(product.stock, 10)).keys()].map((num) => (
                     <option key={num + 1} value={num + 1}>
                       {num + 1}
                     </option>

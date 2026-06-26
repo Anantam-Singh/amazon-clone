@@ -198,7 +198,7 @@ function BuyerCartView() {
                       onChange={e => updateQuantity(item.id, Number(e.target.value))}
                       className="cart-qty-select"
                     >
-                      {[...Array(10).keys()].map(n => (
+                      {[...Array(Math.max(1, Math.min(item.stock || 10, 10))).keys()].map(n => (
                         <option key={n + 1} value={n + 1}>Qty: {n + 1}</option>
                       ))}
                     </select>

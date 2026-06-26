@@ -120,12 +120,31 @@ export function CartProvider({ children }) {
 
   /* ── Cart actions ─────────────────────────────────────────────── */
   const addToCart = async (product, quantity = 1) => {
-    const qty = Number(quantity);
+    let qty = Number(quantity);
+    let exceedsStock = false;
     setCartItems(prev => {
       const ex = prev.find(i => i.id === product.id);
-      if (ex) return prev.map(i => i.id === product.id ? { ...i, quantity: i.quantity + qty } : i);
+      if (ex) {
+        const newQty = Math.min(ex.quantity + qty, product.stock);
+        if (newQty === ex.quantity) {
+          exceedsStock = true;
+          return prev;
+        }
+        qty = newQty - ex.quantity;
+        return prev.map(i => i.id === product.id ? { ...i, quantity: newQty } : i);
+      }
+      qty = Math.min(qty, product.stock);
+      if (qty === 0) {
+        exceedsStock = true;
+        return prev;
+      }
       return [...prev, { ...product, quantity: qty }];
     });
+    
+    if (exceedsStock) {
+      alert("Cannot add more items than available in stock.");
+      return;
+    }
     if (token) {
       try { await axios.post(`${API_BASE}/add`, { productId: product.id, quantity: qty }, getHeaders()); }
       catch (e) { console.error("addToCart DB error", e); }

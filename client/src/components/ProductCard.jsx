@@ -60,10 +60,14 @@ function ProductCard({ product }) {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                updateQuantity(product.id, cartItem.quantity + 1);
+                if (cartItem.quantity < product.stock) {
+                  updateQuantity(product.id, cartItem.quantity + 1);
+                }
               }}
               className="qty-btn-plus"
               aria-label="Increase quantity"
+              disabled={cartItem.quantity >= product.stock}
+              style={cartItem.quantity >= product.stock ? { opacity: 0.5, cursor: "not-allowed" } : {}}
             >
               +
             </button>
