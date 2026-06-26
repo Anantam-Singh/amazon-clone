@@ -152,10 +152,38 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
+// @desc    Purchase products (decrease stock)
+// @route   POST /api/products/purchase
+// @access  Public
+const purchaseProducts = async (req, res, next) => {
+  try {
+    const { items } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ success: false, message: "No items provided" });
+    }
+
+    for (const item of items) {
+      if (!mongoose.Types.ObjectId.isValid(item.id)) continue;
+      
+      const product = await Product.findById(item.id);
+      if (product && product.stock >= item.quantity) {
+        product.stock -= item.quantity;
+        await product.save();
+      }
+    }
+
+    res.status(200).json({ success: true, message: "Stock updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  purchaseProducts,
 };

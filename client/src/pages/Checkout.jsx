@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useCart } from "../context/CartContext";
+import { API_BASE_URL } from "../config";
 
 function Checkout() {
   const {
@@ -163,17 +165,29 @@ function Checkout() {
         setPaymentPhase("Authorizing payment and generating invoice...");
       }, 2200);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         setPaymentLoading(false);
+        try {
+          await axios.post(`${API_BASE_URL}/api/products/purchase`, {
+            items: cartItems.map(i => ({ id: i.id, quantity: i.quantity }))
+          });
+        } catch (err) {
+          console.error("Failed to update stock", err);
+        }
         addOrder(newOrder);
         setOrderNumber(randomId);
         setIsOrdered(true);
       }, 3400);
     } else {
       // Instant processing for COD / UPI mock
-      addOrder(newOrder);
-      setOrderNumber(randomId);
-      setIsOrdered(true);
+      axios.post(`${API_BASE_URL}/api/products/purchase`, {
+        items: cartItems.map(i => ({ id: i.id, quantity: i.quantity }))
+      }).catch(err => console.error("Failed to update stock", err))
+        .finally(() => {
+          addOrder(newOrder);
+          setOrderNumber(randomId);
+          setIsOrdered(true);
+        });
     }
   };
 

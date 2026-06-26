@@ -5,6 +5,7 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  purchaseProducts,
 } = require("../controllers/productController");
 const { protect, sellerOnly } = require("../middleware/authMiddleware");
 
@@ -12,6 +13,7 @@ const router = express.Router();
 
 // Public routes for fetching products
 router.get("/", getProducts);
+router.post("/purchase", purchaseProducts);
 router.get("/:id", getProductById);
 
 // Seller protected routes
