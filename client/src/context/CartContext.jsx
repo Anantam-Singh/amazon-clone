@@ -2,9 +2,11 @@ import { createContext, useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 
+import { API_BASE_URL } from "../config";
+
 const CartContext = createContext();
 
-const API_BASE = "http://localhost:5000/api/cart";
+const API_BASE = `${API_BASE_URL}/api/cart`;
 
 /* Helper: per-user localStorage keys */
 function keys(userId) {

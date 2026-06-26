@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+import { API_BASE_URL } from "../config";
+
 function Login() {
   const [email, setEmail]         = useState("");
   const [password, setPassword]   = useState("");
@@ -85,7 +87,7 @@ function Login() {
 
   /* ── Google OAuth ──────────────────────────────────────────── */
   const openGoogleAuth = () => {
-    window.location.href = `http://localhost:5000/api/auth/google?role=${activeTab}`;
+    window.location.href = `${API_BASE_URL}/api/auth/google?role=${activeTab}`;
   };
 
   /* ── Social mock popup ────────────────────────────────── */

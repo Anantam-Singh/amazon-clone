@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
+import { API_BASE_URL } from "../config";
 
 function ProductDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { cartItems, addToCart, updateQuantity } = useCart();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -17,7 +19,7 @@ function ProductDetails() {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(`${API_BASE_URL}/api/products/${id}`);
         if (res.data && res.data.success) {
           const mappedProduct = {
             ...res.data.data,

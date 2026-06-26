@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE_URL } from "../config";
 
 /* ─────────────────────────────────────────────────────────── */
 /*  SELLER CART — Inventory panel                              */
@@ -14,7 +15,7 @@ function SellerCartView({ user }) {
   useEffect(() => {
     const uid = user?._id || user?.id;
     if (!uid) return;
-    axios.get(`http://localhost:5000/api/products?seller=${uid}`)
+    axios.get(`${API_BASE_URL}/api/products?seller=${uid}`)
       .then(res => { if (res.data.success) setProducts(res.data.data); })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -105,7 +106,7 @@ function BuyerCartView() {
   const [orderNotes, setOrderNotes] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products")
+    axios.get(`${API_BASE_URL}/api/products`)
       .then(res => { if (res.data?.success) setProducts(res.data.data.map(p => ({ ...p, id: p._id }))); })
       .catch(() => {});
   }, []);

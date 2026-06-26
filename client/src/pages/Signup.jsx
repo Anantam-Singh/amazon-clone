@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+import { API_BASE_URL } from "../config";
+
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -192,7 +194,7 @@ function Signup() {
           <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
             <button
               type="button"
-              onClick={() => { window.location.href = `http://localhost:5000/api/auth/google?role=${role}`; }}
+              onClick={() => { window.location.href = `${API_BASE_URL}/api/auth/google?role=${role}`; }}
               style={{
                 flex: 1,
                 display: "flex",

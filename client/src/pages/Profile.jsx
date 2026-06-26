@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { API_BASE_URL } from "../config";
 
 /* ─── Avatar initials circle ───────────────────────────────── */
 function Avatar({ name, role }) {
@@ -311,7 +312,7 @@ export default function Profile() {
   useEffect(() => {
     if (user?.role === "seller") {
       const uid = user._id || user.id;
-      axios.get(`http://localhost:5000/api/products?seller=${uid}`)
+      axios.get(`${API_BASE_URL}/api/products?seller=${uid}`)
         .then(res => { if (res.data.success) setSellerProducts(res.data.data); })
         .catch(() => {});
     }

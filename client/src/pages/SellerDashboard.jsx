@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE_URL } from "../config";
 
 function SellerDashboard() {
   const { user, token, isAuthenticated } = useAuth();
@@ -22,16 +23,16 @@ function SellerDashboard() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Mobiles");
   const [stock, setStock] = useState("");
-  const [image, setImage] = useState("http://localhost:5000/images/iphone.jpg");
+  const [image, setImage] = useState(`${API_BASE_URL}/images/iphone.jpg`);
   const [description, setDescription] = useState("");
   const [formError, setFormError] = useState("");
 
   // Preset stock images for easy selection
   const imagePresets = [
-    { name: "iPhone 16", url: "http://localhost:5000/images/iphone.jpg" },
-    { name: "Samsung S25", url: "http://localhost:5000/images/samsung.jpg" },
-    { name: "MacBook Air", url: "http://localhost:5000/images/macbook.jpg" },
-    { name: "Boat Headphones", url: "http://localhost:5000/images/boat.jpg" }
+    { name: "iPhone 16", url: `${API_BASE_URL}/images/iphone.jpg` },
+    { name: "Samsung S25", url: `${API_BASE_URL}/images/samsung.jpg` },
+    { name: "MacBook Air", url: `${API_BASE_URL}/images/macbook.jpg` },
+    { name: "Boat Headphones", url: `${API_BASE_URL}/images/boat.jpg` }
   ];
 
   const getHeaders = () => ({
@@ -42,7 +43,7 @@ function SellerDashboard() {
     if (!user || !token) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/products?seller=${user.id}`);
+      const res = await axios.get(`${API_BASE_URL}/api/products?seller=${user.id}`);
       if (res.data.success) {
         setProducts(res.data.data);
       }
@@ -87,7 +88,7 @@ function SellerDashboard() {
         description
       };
 
-      const res = await axios.post("http://localhost:5000/api/products", payload, getHeaders());
+      const res = await axios.post(`${API_BASE_URL}/api/products`, payload, getHeaders());
       if (res.data.success) {
         setSuccessMsg("Product listed successfully!");
         setShowAddModal(false);
@@ -131,7 +132,7 @@ function SellerDashboard() {
         description
       };
 
-      const res = await axios.put(`http://localhost:5000/api/products/${activeProduct._id}`, payload, getHeaders());
+      const res = await axios.put(`${API_BASE_URL}/api/products/${activeProduct._id}`, payload, getHeaders());
       if (res.data.success) {
         setSuccessMsg("Product updated successfully!");
         setShowEditModal(false);
@@ -149,7 +150,7 @@ function SellerDashboard() {
     setSuccessMsg("");
 
     try {
-      const res = await axios.delete(`http://localhost:5000/api/products/${productId}`, getHeaders());
+      const res = await axios.delete(`${API_BASE_URL}/api/products/${productId}`, getHeaders());
       if (res.data.success) {
         setSuccessMsg("Product deleted successfully!");
         fetchSellerProducts();
@@ -165,7 +166,7 @@ function SellerDashboard() {
     setPrice("");
     setCategory("Mobiles");
     setStock("");
-    setImage("http://localhost:5000/images/iphone.jpg");
+    setImage(`${API_BASE_URL}/images/iphone.jpg`);
     setDescription("");
     setFormError("");
     setActiveProduct(null);

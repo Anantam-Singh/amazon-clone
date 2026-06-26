@@ -3,6 +3,8 @@ import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
+import { API_BASE_URL } from "../config";
+
 function Home() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
@@ -18,7 +20,7 @@ function Home() {
       setLoading(true);
       setError(null);
       try {
-        let url = "http://localhost:5000/api/products";
+        let url = `${API_BASE_URL}/api/products`;
         const params = [];
         if (selectedCategory !== "All") {
           params.push(`category=${selectedCategory}`);
